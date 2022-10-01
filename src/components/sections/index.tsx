@@ -7,7 +7,7 @@ export interface Section {
     sectionComponent: JSX.Element;
 }
 
-interface SectionIndexProps {
+interface SectionProps {
     sections: Section[];
     scroll: number;
 }
@@ -18,7 +18,7 @@ const SectionWrapper = styled.div`
 
 const SectionSelector = styled.div`
     position: fixed;
-    left: 50px;
+    left: 20px;
     top: auto;
     display: flex;
     flex-direction: column;
@@ -32,31 +32,33 @@ const SectionContainer = styled.div`
     height: 100vh;
 `
 
-const SectionTitle = styled.div`
+const SectionMarker = styled.div`
     border: none;
-    width: 0.7rem;
-    height: 5rem;
-    margin: 2rem 0;
+    width: 0.3rem;
+    height: 3rem;
+    margin: 0.5rem 0;
     border-radius: 10px;
-    background-color: green;
-    transition: 0.25s ease-in;
-    & > span {
-        position: relative;
-        opacity: 0;
-        left: -2rem;
-        transition: 0.25s ease-in;
-    }
+    background-color: #222;
+    transition: 0.1s ease-in;
 
     &:hover, &.selected {
-        background-color: red;
+        background-color: #5deab1;
         & > span {
-            left: 2rem;
+            left: 1rem;
             opacity: 1;
         }
     }
 `
 
-export const SectionIndex = ({ sections, scroll }: SectionIndexProps) => {
+const SectionMarkerTitle = styled.span`
+    font-size: 0.8rem;
+        position: relative;
+        opacity: 0;
+        left: 0.5rem;
+        transition: 0.1s ease-in;
+`
+
+export const Sections = ({ sections, scroll }: SectionProps) => {
     if (sections.length == 0 || typeof window == 'undefined') {
         // Add error component maybe?
         return null;
@@ -103,13 +105,13 @@ export const SectionIndex = ({ sections, scroll }: SectionIndexProps) => {
         <SectionWrapper ref={containerRef}>
             <SectionSelector>
                 {sections.map((section, index) => 
-                    <SectionTitle 
+                    <SectionMarker 
                         onClick={() => { setSelectedSection(section); onChangeSection(section); }} 
                         key={`${section.sectionTitle}-${index}}`}
                         className={selectedSection?.sectionUrl === section.sectionUrl ? 'selected' : undefined}
                     >
-                        <span>{section.sectionTitle}</span>
-                    </SectionTitle>
+                        <SectionMarkerTitle>{section.sectionTitle}</SectionMarkerTitle>
+                    </SectionMarker>
                 )}
             </SectionSelector>
             {wrappedSections}

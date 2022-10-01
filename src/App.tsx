@@ -1,5 +1,6 @@
 import React, { useLayoutEffect, useState, useContext, createContext } from "react";
-import { SectionIndex, Section } from "./components/SectionIndex";
+import styled from "styled-components";
+import { Sections, Section } from "./components/sections";
 import './App.css'
 import { Intro } from "./components/sections/Intro";
 import { UnderAttack } from './components/sections/UnderAttack';
@@ -8,6 +9,12 @@ import { StormySeas } from './components/sections/StormySeas';
 import { Harbour } from './components/sections/Harbour';
 import { SuperStorms } from './components/sections/SuperStorms';
 import { ReadyOrNot } from './components/sections/ReadyOrNot';
+
+const ScrollDisp = styled.span`
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+`
 
 function App() {
   const [scrollValue, setScrollValue] = useState<number>(0);
@@ -55,12 +62,10 @@ function App() {
     () => window.removeEventListener('scroll', scrollEvent);
   }, []);
 
-
-
   return (
     <div id="App">
-      <SectionIndex sections={sections} scroll={scrollValue} />
-     <h1>{scrollValue}</h1>
+      <Sections sections={sections} scroll={scrollValue} />
+      <ScrollDisp>{scrollValue}</ScrollDisp>
     </div>
   )
 }
