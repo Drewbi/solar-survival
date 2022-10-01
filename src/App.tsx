@@ -1,7 +1,7 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
+import React, { useLayoutEffect, useState, useContext, createContext } from "react";
 import { SectionIndex, Section } from "./components/SectionIndex";
 import './App.css'
+import { Intro } from "./components/sections/Intro";
 import { UnderAttack } from './components/sections/UnderAttack';
 import { Forecast } from './components/sections/Forecast';
 import { StormySeas } from './components/sections/StormySeas';
@@ -10,10 +10,15 @@ import { SuperStorms } from './components/sections/SuperStorms';
 import { ReadyOrNot } from './components/sections/ReadyOrNot';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [scrollValue, setScrollValue] = useState<number>(0);
+  const ScrollContext = useContext(createContext(0));
 
   const sections: Section[] = [
     {
+      sectionTitle: 'Solar Survival',
+      sectionComponent: <Intro />,
+      sectionUrl: 'solar-survival'
+    }, {
       sectionTitle: 'Life Under Attack',
       sectionComponent: <UnderAttack />,
       sectionUrl: 'under-attack'
@@ -38,11 +43,24 @@ function App() {
       sectionComponent: <ReadyOrNot />,
       sectionUrl: 'ready-or-not'
     }
-  ]
+  ];
+
+  useLayoutEffect(() => {
+    const scrollEvent = () => {
+      setScrollValue(window.scrollY);
+    };
+
+    window.addEventListener('scroll',scrollEvent);
+
+    () => window.removeEventListener('scroll', scrollEvent);
+  }, []);
+
+
 
   return (
-    <div className="App">
-      <SectionIndex sections={sections} />
+    <div id="App">
+      <SectionIndex sections={sections} scroll={scrollValue} />
+     <h1>{scrollValue}</h1>
     </div>
   )
 }

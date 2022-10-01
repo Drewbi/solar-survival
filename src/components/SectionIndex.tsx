@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef, useLayoutEffect } from "react";
 import styled from "styled-components";
 
 export interface Section {
@@ -9,6 +9,7 @@ export interface Section {
 
 interface SectionIndexProps {
     sections: Section[];
+    scroll: number;
 }
 
 const SectionWrapper = styled.div`
@@ -16,7 +17,7 @@ const SectionWrapper = styled.div`
 `
 
 const SectionSelector = styled.div`
-    position: absolute;
+    position: fixed;
     left: 50px;
     top: auto;
     display: flex;
@@ -28,6 +29,7 @@ const SectionContainer = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    height: 100vh;
 `
 
 const SectionTitle = styled.div`
@@ -42,7 +44,6 @@ const SectionTitle = styled.div`
         position: relative;
         opacity: 0;
         left: -2rem;
-        top: -30%;
         transition: 0.25s ease-in;
     }
 
@@ -50,13 +51,12 @@ const SectionTitle = styled.div`
         background-color: red;
         & > span {
             left: 2rem;
-            top: 30%;
             opacity: 1;
         }
     }
 `
 
-export const SectionIndex = ({ sections }: SectionIndexProps) => {
+export const SectionIndex = ({ sections, scroll }: SectionIndexProps) => {
     if (sections.length == 0 || typeof window == 'undefined') {
         // Add error component maybe?
         return null;
@@ -64,16 +64,13 @@ export const SectionIndex = ({ sections }: SectionIndexProps) => {
 
     const [selectedSection, setSelectedSection] = useState<Section>();
     const containerRef = useRef<HTMLDivElement>(null);
+    const wrappedSections = sections.map((section) => <SectionContainer className="section-container">{section.sectionComponent}</SectionContainer>);
     const onChangeSection = useCallback((selectedSection: Section) => {
         window.history.replaceState(null, selectedSection.sectionTitle, `?section=${selectedSection.sectionUrl}`);
     }, [selectedSection]);
-    const intersectionCallback = () => {
-
-    }
-
+    
     useEffect(() => {
         const sectionUrlParam = new URLSearchParams(window.location.search).get('section');
-        console.log(sectionUrlParam);
         if (sectionUrlParam) {
             setSelectedSection(sections.find(section => section.sectionUrl === sectionUrlParam) || sections[0]);
         } else {
@@ -81,10 +78,26 @@ export const SectionIndex = ({ sections }: SectionIndexProps) => {
         }
     }, []);
 
-    // Intersection Observer effect
-    // useEffect(() => {
-    //     const observer = new IntersectionObserver()
-    // });
+    const intersectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.intersectionRatio > 0) {
+              // Add 'active' class if observation target is inside viewport
+              entry.target.classList.add('active');
+            } else {
+              // Remove 'active' class otherwise
+              entry.target.classList.remove('active');
+            }
+          });
+    });
+
+    useLayoutEffect(() => {
+        const allSectionElements = document.querySelectorAll('.section-container');
+        allSectionElements.forEach((element) => {
+            intersectionObserver.observe(element);
+        });
+
+        return () => intersectionObserver.disconnect();
+    }, []);
 
     return (
         <SectionWrapper ref={containerRef}>
@@ -99,7 +112,7 @@ export const SectionIndex = ({ sections }: SectionIndexProps) => {
                     </SectionTitle>
                 )}
             </SectionSelector>
-            {sections.map((section) => <SectionContainer>{section.sectionComponent}</SectionContainer>)}
+            {wrappedSections}
         </SectionWrapper>
     );
 
