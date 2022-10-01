@@ -14,6 +14,7 @@ interface SectionProps {
 
 const SectionWrapper = styled.div`
     width: 100%;
+    position: relative;
 `
 
 const SectionSelector = styled.div`
@@ -22,6 +23,7 @@ const SectionSelector = styled.div`
     top: auto;
     display: flex;
     flex-direction: column;
+    z-index: 9999;
 `
 
 const SectionContainer = styled.div`
@@ -30,19 +32,20 @@ const SectionContainer = styled.div`
     align-items: center;
     justify-content: center;
     height: 100vh;
+    position: relative;
 `
 
-const SectionMarker = styled.div`
-    border: none;
-    width: 0.3rem;
+const SectionMarkerContainer = styled.div`
     height: 3rem;
+    width: 3rem;
+    position: relative;
     margin: 0.5rem 0;
-    border-radius: 10px;
-    background-color: #222;
-    transition: 0.1s ease-in;
+    cursor: pointer;
 
     &:hover, &.selected {
-        background-color: #5deab1;
+        & > div {
+            background-color: #5deab1;
+        }
         & > span {
             left: 1rem;
             opacity: 1;
@@ -50,12 +53,23 @@ const SectionMarker = styled.div`
     }
 `
 
+const SectionMarker = styled.div`
+    border: none;
+    width: 0.3rem;
+    height: 100%;
+    border-radius: 10px;
+    background-color: #222;
+    transition: 0.1s ease-in;
+`
+
 const SectionMarkerTitle = styled.span`
+    position: absolute;
+    white-space: nowrap;
     font-size: 0.8rem;
-        position: relative;
-        opacity: 0;
-        left: 0.5rem;
-        transition: 0.1s ease-in;
+    top: calc(3rem / 2 - 0.8rem / 2);
+    transition: 0.1s ease-in;
+    left: 0.5rem;
+    opacity: 0;
 `
 
 export const Sections = ({ sections, scroll }: SectionProps) => {
@@ -81,7 +95,7 @@ export const Sections = ({ sections, scroll }: SectionProps) => {
     }, []);
 
     const intersectionObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
+        entries.forEach((entry, i) => {
             if (entry.intersectionRatio > 0) {
               // Add 'active' class if observation target is inside viewport
               entry.target.classList.add('active');
@@ -104,14 +118,15 @@ export const Sections = ({ sections, scroll }: SectionProps) => {
     return (
         <SectionWrapper ref={containerRef}>
             <SectionSelector>
-                {sections.map((section, index) => 
-                    <SectionMarker 
-                        onClick={() => { setSelectedSection(section); onChangeSection(section); }} 
-                        key={`${section.sectionTitle}-${index}}`}
-                        className={selectedSection?.sectionUrl === section.sectionUrl ? 'selected' : undefined}
-                    >
+                {sections.map((section, index) =>
+                    <SectionMarkerContainer>
+                        <SectionMarker 
+                            onClick={() => { setSelectedSection(section); onChangeSection(section); }} 
+                            key={`${section.sectionTitle}-${index}}`}
+                            className={selectedSection?.sectionUrl === section.sectionUrl ? 'selected' : undefined}
+                        />
                         <SectionMarkerTitle>{section.sectionTitle}</SectionMarkerTitle>
-                    </SectionMarker>
+                    </SectionMarkerContainer>
                 )}
             </SectionSelector>
             {wrappedSections}

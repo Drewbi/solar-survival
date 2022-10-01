@@ -16,9 +16,10 @@ const ScrollDisp = styled.span`
   left: 1rem;
 `
 
+export const ScrollContext = createContext(0);
+
 function App() {
   const [scrollValue, setScrollValue] = useState<number>(0);
-  const ScrollContext = useContext(createContext(0));
 
   const sections: Section[] = [
     {
@@ -64,8 +65,10 @@ function App() {
 
   return (
     <div id="App">
-      <Sections sections={sections} scroll={scrollValue} />
-      <ScrollDisp>{scrollValue}</ScrollDisp>
+      <ScrollContext.Provider value={scrollValue}>
+        <Sections sections={sections} scroll={scrollValue} />
+        <ScrollDisp>{scrollValue}</ScrollDisp>
+      </ScrollContext.Provider>
     </div>
   )
 }
