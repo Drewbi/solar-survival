@@ -223,6 +223,7 @@ const sketch = (sketch: p5) => {
         if (dot.default) {
           dot.pos.x = sketch.random(VIS_WIDTH - 4000)
           dot.pos.y = sketch.random(VIS_HEIGHT)
+          dot.velocity.set(100, 0)
         } else {
           dots.splice(i, 1)
         }
