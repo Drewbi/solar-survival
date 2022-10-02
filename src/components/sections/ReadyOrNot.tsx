@@ -3,11 +3,12 @@ import earthImg from "../../assets/highresAtmos.jpg"
 
 const Container = styled.div`
   position: absolute;
-  top: 0;
+  top: 20rem;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  z-index: 10;
 `
 const Title = styled.h2`
   font-size: 2rem;

@@ -38,20 +38,20 @@ function App() {
       url: 'chaos-forcast',
       length: 1000
     }, {
-      title: 'Stormy Seas',
-      component: <StormySeas />,
-      url: 'stormy-seas',
-      length: 1000
-    }, {
       title: 'Ships in a Harbour',
       component: <Harbour />,
       url: 'ships-in-harbour',
       length: 1000
     }, {
+      title: 'Stormy Seas',
+      component: <StormySeas />,
+      url: 'stormy-seas',
+      length: 500
+    }, {
       title: 'Super Storms',
       component: <SuperStorms />,
       url: 'super-storms',
-      length: 1000
+      length: 500
     }, {
       title: 'Ready or Not',
       component: <ReadyOrNot />,
