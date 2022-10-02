@@ -132,11 +132,11 @@ export const Sections = ({ sections, scroll }: SectionProps) => {
                 {sections.map((section, index) =>
                     <SectionMarkerContainer
                         onClick={() => { setSelectedSection(section); onChangeSection(section); }} 
-                        key={`${section.sectionTitle}-${index}}`}
-                        className={selectedSection?.sectionUrl === section.sectionUrl ? 'selected' : undefined}
+                        key={`${section.title}-${index}}`}
+                        className={selectedSection?.url === section.url ? 'selected' : undefined}
                     >
                         <SectionMarker />
-                        <SectionMarkerTitle>{section.sectionTitle}</SectionMarkerTitle>
+                        <SectionMarkerTitle>{section.title}</SectionMarkerTitle>
                     </SectionMarkerContainer>
                 )}
             </SectionSelector>
