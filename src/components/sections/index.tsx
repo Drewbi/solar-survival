@@ -119,12 +119,12 @@ export const Sections = ({ sections, scroll }: SectionProps) => {
         <SectionWrapper ref={containerRef}>
             <SectionSelector>
                 {sections.map((section, index) =>
-                    <SectionMarkerContainer>
-                        <SectionMarker 
-                            onClick={() => { setSelectedSection(section); onChangeSection(section); }} 
-                            key={`${section.sectionTitle}-${index}}`}
-                            className={selectedSection?.sectionUrl === section.sectionUrl ? 'selected' : undefined}
-                        />
+                    <SectionMarkerContainer
+                        onClick={() => { setSelectedSection(section); onChangeSection(section); }} 
+                        key={`${section.sectionTitle}-${index}}`}
+                        className={selectedSection?.sectionUrl === section.sectionUrl ? 'selected' : undefined}
+                    >
+                        <SectionMarker />
                         <SectionMarkerTitle>{section.sectionTitle}</SectionMarkerTitle>
                     </SectionMarkerContainer>
                 )}
