@@ -1,5 +1,7 @@
-import React, { useState, useEffect, useCallback, useRef, useLayoutEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef, useLayoutEffect, useContext } from "react";
 import styled from "styled-components";
+import { ScrollContext } from "../../App";
+import { useScrollPosition } from "../hooks/useScrollPosition";
 
 export interface Section {
     title: string;
@@ -86,14 +88,16 @@ export const Sections = ({ sections, scroll }: SectionProps) => {
         return null;
     }
 
+   
+
     const [selectedSection, setSelectedSection] = useState<Section>();
+    const globalScrollPosition = useContext(ScrollContext);
     const containerRef = useRef<HTMLDivElement>(null);
     const wrappedSections = sections.map((section) => <SectionWrapper length={section.length} className="section-container">{section.component}</SectionWrapper>);
+    const { selectedComponentScrollPosition, scrollPositionsForSections } = useScrollPosition(sections, selectedSection || sections[0]);
     const onChangeSection = useCallback((selectedSection: Section) => {
-        const sectionIndex = sections.findIndex(sec => sec.url === selectedSection.url)
-        const scrollNum = sections.slice(0, sectionIndex).reduce((acc, curr) => acc + curr.length, 0)
-        window.scroll(0, scrollNum)
         window.history.replaceState(null, selectedSection.title, `?section=${selectedSection.url}`);
+        window.scroll(0, selectedComponentScrollPosition);
     }, [selectedSection]);
     
     useEffect(() => {
@@ -125,6 +129,13 @@ export const Sections = ({ sections, scroll }: SectionProps) => {
 
         return () => intersectionObserver.disconnect();
     }, []);
+
+    useEffect(() => {
+        setSelectedSection(sections.find(({ url }, index) => 
+            scrollPositionsForSections.find(({ scrollValue }) => scrollValue >= globalScrollPosition)?.url === url
+        ));
+
+    }, [globalScrollPosition, scrollPositionsForSections])
 
     return (
         <SectionContainer ref={containerRef}>
