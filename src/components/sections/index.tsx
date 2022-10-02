@@ -24,6 +24,9 @@ const SectionSelector = styled.div`
     display: flex;
     flex-direction: column;
     z-index: 9999;
+    height: 90vh;
+    justify-content: space-between;
+    align-items: stretch;
 `
 
 const SectionContainer = styled.div`
