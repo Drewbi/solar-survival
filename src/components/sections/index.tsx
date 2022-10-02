@@ -2,9 +2,10 @@ import React, { useState, useEffect, useCallback, useRef, useLayoutEffect } from
 import styled from "styled-components";
 
 export interface Section {
-    sectionTitle: string;
-    sectionUrl: string;
-    sectionComponent: JSX.Element;
+    title: string;
+    url: string;
+    component: JSX.Element;
+    length: number
 }
 
 interface SectionProps {
@@ -12,7 +13,7 @@ interface SectionProps {
     scroll: number;
 }
 
-const SectionWrapper = styled.div`
+const SectionContainer = styled.div`
     width: 100%;
     position: relative;
 `
@@ -29,12 +30,16 @@ const SectionSelector = styled.div`
     align-items: stretch;
 `
 
-const SectionContainer = styled.div`
+interface WapperProps {
+    length: number;
+}
+
+const SectionWrapper = styled.div<WapperProps>`
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    height: ${props => props.length}px;
     position: relative;
 `
 
@@ -83,15 +88,18 @@ export const Sections = ({ sections, scroll }: SectionProps) => {
 
     const [selectedSection, setSelectedSection] = useState<Section>();
     const containerRef = useRef<HTMLDivElement>(null);
-    const wrappedSections = sections.map((section) => <SectionContainer className="section-container">{section.sectionComponent}</SectionContainer>);
+    const wrappedSections = sections.map((section) => <SectionWrapper length={section.length} className="section-container">{section.component}</SectionWrapper>);
     const onChangeSection = useCallback((selectedSection: Section) => {
-        window.history.replaceState(null, selectedSection.sectionTitle, `?section=${selectedSection.sectionUrl}`);
+        const sectionIndex = sections.findIndex(sec => sec.url === selectedSection.url)
+        const scrollNum = sections.slice(0, sectionIndex).reduce((acc, curr) => acc + curr.length, 0)
+        window.scroll(0, scrollNum)
+        window.history.replaceState(null, selectedSection.title, `?section=${selectedSection.url}`);
     }, [selectedSection]);
     
     useEffect(() => {
         const sectionUrlParam = new URLSearchParams(window.location.search).get('section');
         if (sectionUrlParam) {
-            setSelectedSection(sections.find(section => section.sectionUrl === sectionUrlParam) || sections[0]);
+            setSelectedSection(sections.find(section => section.url === sectionUrlParam) || sections[0]);
         } else {
             setSelectedSection(sections[0]);
         }
@@ -119,7 +127,7 @@ export const Sections = ({ sections, scroll }: SectionProps) => {
     }, []);
 
     return (
-        <SectionWrapper ref={containerRef}>
+        <SectionContainer ref={containerRef}>
             <SectionSelector>
                 {sections.map((section, index) =>
                     <SectionMarkerContainer
@@ -133,7 +141,7 @@ export const Sections = ({ sections, scroll }: SectionProps) => {
                 )}
             </SectionSelector>
             {wrappedSections}
-        </SectionWrapper>
+        </SectionContainer>
     );
 
 }

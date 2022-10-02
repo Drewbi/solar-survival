@@ -23,33 +23,40 @@ function App() {
 
   const sections: Section[] = [
     {
-      sectionTitle: 'Solar Survival',
-      sectionComponent: <Intro />,
-      sectionUrl: 'solar-survival'
+      title: 'Solar Survival',
+      component: <Intro />,
+      url: 'solar-survival',
+      length: 1700
     }, {
-      sectionTitle: 'Life Under Attack',
-      sectionComponent: <UnderAttack />,
-      sectionUrl: 'under-attack'
+      title: 'Life Under Attack',
+      component: <UnderAttack />,
+      url: 'under-attack',
+      length: 1000
     }, {
-      sectionTitle: 'A Chaotic Forecast',
-      sectionComponent: <Forecast />,
-      sectionUrl: 'chaos-forcast'
+      title: 'A Chaotic Forecast',
+      component: <Forecast />,
+      url: 'chaos-forcast',
+      length: 1000
     }, {
-      sectionTitle: 'Stormy Seas',
-      sectionComponent: <StormySeas />,
-      sectionUrl: 'stormy-seas'
+      title: 'Stormy Seas',
+      component: <StormySeas />,
+      url: 'stormy-seas',
+      length: 1000
     }, {
-      sectionTitle: 'Ships in a Harbour',
-      sectionComponent: <Harbour />,
-      sectionUrl: 'ships-in-harbour'
+      title: 'Ships in a Harbour',
+      component: <Harbour />,
+      url: 'ships-in-harbour',
+      length: 1000
     }, {
-      sectionTitle: 'Super Storms',
-      sectionComponent: <SuperStorms />,
-      sectionUrl: 'super-storms'
+      title: 'Super Storms',
+      component: <SuperStorms />,
+      url: 'super-storms',
+      length: 1000
     }, {
-      sectionTitle: 'Ready or Not',
-      sectionComponent: <ReadyOrNot />,
-      sectionUrl: 'ready-or-not'
+      title: 'Ready or Not',
+      component: <ReadyOrNot />,
+      url: 'ready-or-not',
+      length: 1000
     }
   ];
 
