@@ -74,7 +74,7 @@ function App() {
     <div id="App">
       <ScrollContext.Provider value={scrollValue}>
         <Sections sections={sections} scroll={scrollValue} />
-        <ScrollDisp>{scrollValue}</ScrollDisp>
+        {/* <ScrollDisp>{scrollValue}</ScrollDisp> */}
       </ScrollContext.Provider>
     </div>
   )
