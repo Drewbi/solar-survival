@@ -25,6 +25,9 @@ const SectionSelector = styled.div`
     display: flex;
     flex-direction: column;
     z-index: 9999;
+    height: 90vh;
+    justify-content: space-between;
+    align-items: stretch;
 `
 
 interface WapperProps {
@@ -127,12 +130,13 @@ export const Sections = ({ sections, scroll }: SectionProps) => {
         <SectionContainer ref={containerRef}>
             <SectionSelector>
                 {sections.map((section, index) =>
-                    <SectionMarkerContainer onClick={() => { setSelectedSection(section); onChangeSection(section); }} >
-                        <SectionMarker 
-                            key={`${section.title}-${index}}`}
-                            className={selectedSection?.url === section.url ? 'selected' : ''}
-                        />
-                        <SectionMarkerTitle>{section.title}</SectionMarkerTitle>
+                    <SectionMarkerContainer
+                        onClick={() => { setSelectedSection(section); onChangeSection(section); }} 
+                        key={`${section.sectionTitle}-${index}}`}
+                        className={selectedSection?.sectionUrl === section.sectionUrl ? 'selected' : undefined}
+                    >
+                        <SectionMarker />
+                        <SectionMarkerTitle>{section.sectionTitle}</SectionMarkerTitle>
                     </SectionMarkerContainer>
                 )}
             </SectionSelector>
